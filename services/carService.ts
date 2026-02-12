@@ -86,6 +86,18 @@ export const carService = {
     }
   },
 
+  submitBooking: async (bookingDetails: any): Promise<boolean> => {
+    // Simulating an API call / Payment processing delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // In a real app, you would insert into a 'bookings' table here:
+    // const { error } = await supabase.from('bookings').insert([bookingDetails]);
+    // return !error;
+
+    console.log("Booking submitted:", bookingDetails);
+    return true;
+  },
+
   // --- Admin Operations ---
 
   uploadImage: async (file: File): Promise<string | null> => {
