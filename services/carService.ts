@@ -18,7 +18,7 @@ const mapDbCarToCar = (dbCar: any): Car => {
       seats: Number(dbCar.seats),
       transmission: dbCar.transmission,
     },
-    features: dbCar.features || [], // Assumes text[] array in Postgres
+    features: dbCar.features || [], 
     available: dbCar.available,
     description: dbCar.description,
   };
@@ -29,7 +29,8 @@ export const carService = {
     try {
       const { data, error } = await supabase
         .from('cars')
-        .select('*');
+        .select('*')
+        .order('price_per_day', { ascending: true }); // Ordered for better UX
 
       if (error) {
         console.warn('Supabase error fetching cars, falling back to mock data:', error.message);
@@ -37,7 +38,6 @@ export const carService = {
       }
 
       if (!data || data.length === 0) {
-        console.log('No cars found in DB, using mock data.');
         return FEATURED_CARS;
       }
 
@@ -49,9 +49,6 @@ export const carService = {
   },
 
   getCarById: async (id: string): Promise<Car | null> => {
-    // First try to find in mock data to avoid DB call if it's a mock ID
-    const mockCar = FEATURED_CARS.find(c => c.id === id);
-    
     try {
       const { data, error } = await supabase
         .from('cars')
@@ -60,15 +57,16 @@ export const carService = {
         .single();
 
       if (error || !data) {
-        // If DB fetch fails, check if we have it in mock data (fallback)
-        if (mockCar) return mockCar;
-        console.warn('Supabase error fetching car:', error?.message);
-        return null;
+        console.warn('Supabase error fetching car details:', error?.message);
+        // Fallback: Check mock data only if DB fails (useful for hybrid/dev states)
+        const mockCar = FEATURED_CARS.find(c => c.id === id);
+        return mockCar || null;
       }
 
       return mapDbCarToCar(data);
     } catch (err) {
       console.error('Unexpected error fetching car:', err);
+      const mockCar = FEATURED_CARS.find(c => c.id === id);
       return mockCar || null;
     }
   },
@@ -78,6 +76,7 @@ export const carService = {
       const { data, error } = await supabase
         .from('cars')
         .select('*')
+        .eq('available', true) // Only show available cars on home page
         .limit(limit);
 
       if (error) {

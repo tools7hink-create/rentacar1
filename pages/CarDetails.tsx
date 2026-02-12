@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { carService } from '../services/carService';
 import { Car } from '../types';
 import Button from '../components/Button';
-import { Check, Calendar, ArrowLeft, Info, Settings, Zap, Loader2 } from 'lucide-react';
+import { Check, Calendar, ArrowLeft, Info, Settings, Zap, Loader2, Ban } from 'lucide-react';
 
 const CarDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -59,7 +59,14 @@ const CarDetails: React.FC = () => {
           {/* Left Column: Images */}
           <div className="space-y-4">
             <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-lg relative bg-slate-100">
-               <img src={images[activeImage]} alt={car.name} className="w-full h-full object-cover" />
+               <img src={images[activeImage]} alt={car.name} className={`w-full h-full object-cover ${!car.available ? 'grayscale' : ''}`} />
+               {!car.available && (
+                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                       <span className="bg-red-500 text-white px-6 py-2 rounded-full font-bold uppercase tracking-widest text-lg shadow-xl border-2 border-white transform -rotate-12">
+                           Currently Unavailable
+                       </span>
+                   </div>
+               )}
             </div>
             <div className="grid grid-cols-3 gap-4">
               {images.map((img, idx) => (
@@ -133,10 +140,17 @@ const CarDetails: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 sticky bottom-6 bg-white/80 backdrop-blur-md p-4 sm:p-0 sm:static rounded-2xl border border-slate-200 sm:border-none shadow-xl sm:shadow-none">
               <div className="flex-1">
-                 <Button fullWidth size="lg">Book Now</Button>
+                 <Button 
+                    fullWidth 
+                    size="lg" 
+                    disabled={!car.available}
+                    className={!car.available ? 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none' : ''}
+                 >
+                    {car.available ? 'Book Now' : 'Currently Unavailable'}
+                 </Button>
               </div>
               <Button variant="outline" size="lg" className="px-6">
-                <Calendar className="mr-2" size={18} /> Check Availability
+                <Calendar className="mr-2" size={18} /> Check Dates
               </Button>
             </div>
             
