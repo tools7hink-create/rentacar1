@@ -1,3 +1,4 @@
+
 import { Car, CarCategory } from './types';
 
 export const FEATURED_CARS: Car[] = [
@@ -8,6 +9,7 @@ export const FEATURED_CARS: Car[] = [
     category: CarCategory.SPORTS,
     pricePerDay: 450,
     imageUrl: 'https://picsum.photos/seed/porsche911/800/600',
+    galleryImages: [],
     specs: {
       engine: '3.0L Twin-Turbo Flat-6',
       horsepower: 443,
@@ -26,6 +28,7 @@ export const FEATURED_CARS: Car[] = [
     category: CarCategory.SUV,
     pricePerDay: 600,
     imageUrl: 'https://picsum.photos/seed/rangerover/800/600',
+    galleryImages: [],
     specs: {
       engine: '4.4L Twin-Turbo V8',
       horsepower: 523,
@@ -44,6 +47,7 @@ export const FEATURED_CARS: Car[] = [
     category: CarCategory.ELECTRIC,
     pricePerDay: 350,
     imageUrl: 'https://picsum.photos/seed/tesla/800/600',
+    galleryImages: [],
     specs: {
       engine: 'Tri-Motor Electric',
       horsepower: 1020,
@@ -62,6 +66,7 @@ export const FEATURED_CARS: Car[] = [
     category: CarCategory.CONVERTIBLE,
     pricePerDay: 1200,
     imageUrl: 'https://picsum.photos/seed/lambo/800/600',
+    galleryImages: [],
     specs: {
       engine: '5.2L V10',
       horsepower: 630,
@@ -80,6 +85,7 @@ export const FEATURED_CARS: Car[] = [
     category: CarCategory.LUXURY,
     pricePerDay: 500,
     imageUrl: 'https://picsum.photos/seed/merc/800/600',
+    galleryImages: [],
     specs: {
       engine: '4.0L V8 Biturbo',
       horsepower: 496,
@@ -98,6 +104,7 @@ export const FEATURED_CARS: Car[] = [
     category: CarCategory.SUV,
     pricePerDay: 400,
     imageUrl: 'https://picsum.photos/seed/escalade/800/600',
+    galleryImages: [],
     specs: {
       engine: '6.2L V8',
       horsepower: 420,

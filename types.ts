@@ -1,3 +1,4 @@
+
 export enum CarCategory {
   SUV = 'SUV',
   SEDAN = 'Sedan',
@@ -14,6 +15,7 @@ export interface Car {
   category: CarCategory;
   pricePerDay: number;
   imageUrl: string;
+  galleryImages: string[];
   specs: {
     engine: string;
     horsepower: number;

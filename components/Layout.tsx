@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Car, Phone, Instagram, Twitter, Facebook } from 'lucide-react';
+import { Menu, X, Car, Phone, Instagram, Twitter, Facebook, ShieldCheck } from 'lucide-react';
 import GeminiAssistant from './GeminiAssistant';
 import Button from './Button';
 
@@ -9,6 +9,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/';
+  
+  // Hide Layout header/footer for Admin Routes to give it a dedicated feel
+  const isAdminRoute = location.pathname.startsWith('/admin');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +27,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     { name: 'Services', path: '#' }, // Mock links
     { name: 'About', path: '#' },
   ];
+
+  if (isAdminRoute) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-slate-900">
@@ -154,7 +161,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </div>
           <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
             <p>&copy; 2025 Prestige Motors. All rights reserved.</p>
-            <p>Designed for excellence.</p>
+            <div className="flex items-center gap-6">
+                <p>Designed for excellence.</p>
+                <Link to="/admin" className="hover:text-luxury-gold transition-colors flex items-center gap-1 text-xs">
+                    <ShieldCheck size={12} /> Admin
+                </Link>
+            </div>
           </div>
         </div>
       </footer>

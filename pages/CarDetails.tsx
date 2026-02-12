@@ -37,12 +37,17 @@ const CarDetails: React.FC = () => {
 
   if (!car) return null;
 
-  // Mock multiple images for the gallery based on the fetched image
-  const images = [
-    car.imageUrl,
-    `https://picsum.photos/seed/${car.id}2/800/600`,
-    `https://picsum.photos/seed/${car.id}3/800/600`
-  ];
+  // Use real gallery images if available, otherwise fallback to mock/seed strategy
+  const galleryImages = (car.galleryImages && car.galleryImages.length > 0) 
+    ? [car.imageUrl, ...car.galleryImages]
+    : [
+        car.imageUrl,
+        `https://picsum.photos/seed/${car.id}2/800/600`,
+        `https://picsum.photos/seed/${car.id}3/800/600`
+      ];
+
+  // Ensure unique images
+  const images = Array.from(new Set(galleryImages));
 
   return (
     <div className="pt-24 pb-24 min-h-screen bg-white">
@@ -59,7 +64,7 @@ const CarDetails: React.FC = () => {
           {/* Left Column: Images */}
           <div className="space-y-4">
             <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-lg relative bg-slate-100">
-               <img src={images[activeImage]} alt={car.name} className={`w-full h-full object-cover ${!car.available ? 'grayscale' : ''}`} />
+               <img src={images[activeImage] || car.imageUrl} alt={car.name} className={`w-full h-full object-cover ${!car.available ? 'grayscale' : ''}`} />
                {!car.available && (
                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                        <span className="bg-red-500 text-white px-6 py-2 rounded-full font-bold uppercase tracking-widest text-lg shadow-xl border-2 border-white transform -rotate-12">
@@ -68,17 +73,19 @@ const CarDetails: React.FC = () => {
                    </div>
                )}
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              {images.map((img, idx) => (
-                <button 
-                  key={idx}
-                  onClick={() => setActiveImage(idx)}
-                  className={`aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all ${activeImage === idx ? 'border-luxury-black opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
-                >
-                  <img src={img} alt={`${car.name} view ${idx+1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
+            {images.length > 1 && (
+                <div className="grid grid-cols-3 gap-4">
+                {images.map((img, idx) => (
+                    <button 
+                    key={idx}
+                    onClick={() => setActiveImage(idx)}
+                    className={`aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all ${activeImage === idx ? 'border-luxury-black opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                    >
+                    <img src={img} alt={`${car.name} view ${idx+1}`} className="w-full h-full object-cover" />
+                    </button>
+                ))}
+                </div>
+            )}
           </div>
 
           {/* Right Column: Details */}
